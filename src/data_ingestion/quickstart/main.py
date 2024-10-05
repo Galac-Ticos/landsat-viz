@@ -22,6 +22,8 @@ print(f"{len(scenes)} scenes found.")
 
 # Process the result
 for scene in scenes:
+    print(scene)
+    input("Press Enter to continue...")
     print(scene['acquisition_date'].strftime('%Y-%m-%d'))
     # Write scene footprints to disk
     fname = f"{scene['landsat_product_id']}.geojson"

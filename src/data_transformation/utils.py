@@ -118,10 +118,5 @@ def get_angle_of_rotation(path):
 
 
 def rotate_and_save_image(image_path: str):
-    angle = get_angle_of_rotation(
-        '/home/alexbrenes/git/landsat-viz/src/data/LC09_L1TP_015053_20240801_20240802_02_T1_thumb_large.jpeg')
+    angle = get_angle_of_rotation(image_path)
     rotate_image(image_path, angle)
-
-
-rotate_and_save_image(
-    '/home/alexbrenes/git/landsat-viz/src/data/LC09_L1TP_015053_20240801_20240802_02_T1_thumb_large.jpeg')

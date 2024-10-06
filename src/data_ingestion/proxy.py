@@ -1,5 +1,7 @@
 from landsatxplore.earthexplorer import EarthExplorer, API
-from . import utils
+# from . import utils
+import utils
+
 
 class Proxy:
     def __init__(self, username, password) -> None:
@@ -24,7 +26,7 @@ class Proxy:
     def download_scene(self, scene) -> int:
         scene_id = scene['landsat_product_id']
         print(f"Downloading scene {scene_id}...")
-        self.__ee.download(scene_id, output_dir='./data', overwrite=True)
+        self.__ee.download(scene_id, output_dir='../data', overwrite=True)
         return 0
 
     def download_scenes(self, scenes: list):

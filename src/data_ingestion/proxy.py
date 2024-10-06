@@ -1,6 +1,5 @@
 from landsatxplore.earthexplorer import EarthExplorer, API
-from utils import write_scene_json
-
+from . import utils
 
 class Proxy:
     def __init__(self, username, password) -> None:
@@ -41,7 +40,7 @@ class Proxy:
         status = self.download_scenes(scenes)
 
         for s in scenes:
-            write_scene_json(s)
+            utils.write_scene_json(s)
 
         # status = 1
         return status

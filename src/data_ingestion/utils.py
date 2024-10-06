@@ -4,7 +4,6 @@ from datetime import datetime
 from shapely.geometry import mapping, Polygon
 import tarfile
 
-
 def serialize_polygon(polygon):
     """Convert a Polygon object to a GeoJSON-like dictionary."""
     return mapping(polygon)

@@ -1,5 +1,6 @@
 import os
 import tarfile
+import json
 
 
 def extract_tar_files(data_directory):
@@ -17,16 +18,33 @@ def extract_tar_files(data_directory):
             print(f'Finished extracting {filename}.\n')
 
 
+def load_json_files(file_paths):
+    json_objects = []
+
+    for file_path in file_paths:
+        # Check if the file exists
+        if os.path.exists(file_path):
+            with open(file_path, 'r') as f:
+                try:
+                    # Load the JSON content
+                    json_data = json.load(f)
+                    json_objects.append(json_data)
+                except json.JSONDecodeError as e:
+                    print(f"Error decoding JSON from {file_path}: {e}")
+        else:
+            print(f"File not found: {file_path}")
+
+    return json_objects
+
+
 def find_metadata_json_files(directory_path):
-    # List to hold the matching file paths
     matching_files = []
 
-    # Loop through all files in the specified directory
     for filename in os.listdir(directory_path):
-        # Check if the file ends with 'MTL.Json'
-        if filename.endswith("MTL.Json"):
+        # Check if the file ends with 'MTL.json' (case insensitive)
+        if filename.lower().endswith("mtl.json"):
             # Construct the full path and add it to the list
             full_path = os.path.join(directory_path, filename)
-            matching_files.append(full_path)
+            matching_files.append(load_json_files([full_path])[0])
 
     return matching_files

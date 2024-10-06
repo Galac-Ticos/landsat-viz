@@ -16,14 +16,15 @@ import { useNavigate } from "react-router-dom";
 import Navbar from "components/Navbar.js";
 import Footer from "components/Footer.js";
 
-function LoginPage() {
+function RegisterPage() {
   const [firstFocus, setFirstFocus] = useState(false);
   const [lastFocus, setLastFocus] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isValid, setIsValid] = useState(false);
   const navigate = useNavigate();
-  const BASE_HOST = "https://landsat-backend-7dafd70968d0.herokuapp.com"
+  const BASE_HOST = "https://landsat-backend-7dafd70968d0.herokuapp.com";
+
   useEffect(() => {
     document.body.classList.add("login-page");
     document.body.classList.add("sidebar-collapse");
@@ -37,13 +38,14 @@ function LoginPage() {
     };
   }, []);
 
+  // Verificar si el email y el password están ingresados para habilitar el botón
   useEffect(() => {
     setIsValid(email !== "" && password !== "");
   }, [email, password]);
 
-  const handleLogin = async () => {
+  const handleRegister = async () => {
     try {
-      const response = await fetch(`${BASE_HOST}/auth`, {
+      const response = await fetch(`${BASE_HOST}/users`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -56,14 +58,15 @@ function LoginPage() {
 
       const data = await response.json();
 
-      if (response.ok && data.token) {
-        localStorage.setItem("authToken", data.token);
+      if (response.ok) {
+        // Registro exitoso, guardar el token si es necesario o redirigir
+        localStorage.setItem("authToken", data.token); // Asume que el token viene en la respuesta
         navigate("/home");
       } else {
-        alert(data.error || "Login failed");
+        alert(data.error || "Registration failed");
       }
     } catch (error) {
-      console.error("Error during login:", error);
+      console.error("Error during registration:", error);
       alert("Something went wrong. Please try again.");
     }
   };
@@ -84,7 +87,7 @@ function LoginPage() {
               <Card className="card-login card-plain">
                 <Form action="" className="form" method="">
                   <CardBody>
-                    <h3 className="h1-seo mb-4"> Login </h3>
+                    <h3 className="h1-seo mb-4"> Register </h3>
                     <InputGroup
                       className={
                         "no-border input-lg" +
@@ -132,32 +135,11 @@ function LoginPage() {
                       className="btn-round"
                       color="info"
                       size="lg"
-                      onClick={handleLogin}
+                      onClick={handleRegister}
                       disabled={!isValid}
                     >
-                      Get Started
+                      Register
                     </Button>
-                    <div className="pull-left">
-                      <h6>
-                        <a
-                          className="link"
-                          href="/register"
-                        >
-                          Create Account
-                        </a>
-                      </h6>
-                    </div>
-                    <div className="pull-right">
-                      <h6>
-                        <a
-                          className="link"
-                          href="#pablo"
-                          onClick={(e) => e.preventDefault()}
-                        >
-                          Need Help?
-                        </a>
-                      </h6>
-                    </div>
                   </CardFooter>
                 </Form>
               </Card>
@@ -170,4 +152,4 @@ function LoginPage() {
   );
 }
 
-export default LoginPage;
+export default RegisterPage;

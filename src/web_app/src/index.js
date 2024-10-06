@@ -25,6 +25,7 @@ import "assets/demo/demo.css?v=1.5.0";
 import "assets/demo/nucleo-icons-page-styles.css?v=1.5.0";
 import HomePage from "views/HomePage.js";
 import LoginPage from "views/LoginPage.js";
+import RegisterPage from "views/RegisterPage.js";
 import SettingsPage from "views/SettingsPage.js";
 
 import ProtectedRoute from "components/ProtectedRoute.js";
@@ -35,8 +36,9 @@ root.render(
   <BrowserRouter>
     <Routes>
       <Route path="/home" element={<HomePage />} />
-      <Route path="/settings" element={<ProtectedRoute element={<SettingsPage />} />} />
       <Route path="/login" element={<LoginPage />} />
+      <Route path="/register" element={<RegisterPage />} />
+      <Route path="/settings" element={<ProtectedRoute element={<SettingsPage />} />} />
       <Route path="*" element={<Navigate to="/home" replace />} />
     </Routes>
   </BrowserRouter>

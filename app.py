@@ -15,7 +15,7 @@ ENV = os.environ.get('ENV', 'DEV')
 # Setup CORS
 cors = CORS(app, resources={
     r"/auth": {
-        "origins": "*" if ENV == "DEV" else "https://landsat-viz.vercel.app"
+        "origins": "*"# if ENV == "DEV" else "https://landsat-viz.vercel.app"
     }
 })
 

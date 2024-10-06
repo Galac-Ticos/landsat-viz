@@ -18,6 +18,10 @@ import {
 function Navbar() {
   const [navbarColor, setNavbarColor] = React.useState("navbar-transparent");
   const [collapseOpen, setCollapseOpen] = React.useState(false);
+
+  // Verificar si el usuario está autenticado
+  const isAuthenticated = localStorage.getItem("authToken") !== null;
+
   React.useEffect(() => {
     const updateNavbarColor = () => {
       if (
@@ -37,6 +41,7 @@ function Navbar() {
       window.removeEventListener("scroll", updateNavbarColor);
     };
   });
+
   return (
     <>
       {collapseOpen ? (
@@ -52,7 +57,7 @@ function Navbar() {
         <Container>
           <div className="navbar-translate">
             <NavbarBrand href="/" target="_blank" id="navbar-brand" >
-             <img
+              <img
                 src={CRImage}
                 alt="Landsat Icon"
                 style={{ width: "auto", height: "24px", marginRight: "10px" }}
@@ -60,58 +65,73 @@ function Navbar() {
               <p>Landsat viz</p>
             </NavbarBrand>   
           </div>
-          <Collapse
-            className="justify-content-end"
-            isOpen={collapseOpen}
-            navbar
-          >
+          <Collapse className="justify-content-end" isOpen={collapseOpen} navbar>
             <Nav navbar>
               <NavItem>
-                <NavLink href="/login">
-                  <i className="now-ui-icons users_single-02"></i>
-                  <p>Login</p>
+                <NavLink href="/">
+                  <i className="now-ui-icons users_circle-08"></i>
+                  <p>Home</p>
                 </NavLink>
               </NavItem>
-              <NavItem>
-                <NavLink href="/notifications">
-                  <i className="now-ui-icons ui-1_bell-53"></i>
-                  <p>Notifications</p>
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href="/compare-data">
-                  <i className="now-ui-icons objects_spaceship"></i>
-                  <p>Compare Data</p>
-                </NavLink>
-              </NavItem>
-              <NavItem>
-                <NavLink href="/locations">
-                  <i className="now-ui-icons location_pin"></i>
-                  <p>Locations</p>
-                </NavLink>
-              </NavItem>
-              <UncontrolledDropdown nav>
-                <DropdownToggle
-                  caret
-                  color="default"
-                  href="/profile"
-                  nav
-                  onClick={(e) => e.preventDefault()}
-                >
-                  <i className="now-ui-icons users_single-02 mr-1"></i>
-                  <p>Profile</p>
-                </DropdownToggle>
-                <DropdownMenu>
-                  <DropdownItem to="/settings" tag={Link}>
-                    <i className="now-ui-icons ui-1_settings-gear-63 mr-1"></i>
-                    Settings
-                  </DropdownItem>
-                  <DropdownItem href="/login" tag={Link}>
-                    <i className="now-ui-icons ui-1_simple-remove mr-1"></i>
-                    Logout
-                  </DropdownItem>
-                </DropdownMenu>
-              </UncontrolledDropdown>
+
+              {!isAuthenticated ? (
+                <NavItem>
+                  <NavLink href="/login">
+                    <i className="now-ui-icons users_single-02"></i>
+                    <p>Login</p>
+                  </NavLink>
+                </NavItem>
+              ) : (
+                <>
+                  <NavItem>
+                    <NavLink href="/notifications">
+                      <i className="now-ui-icons ui-1_bell-53"></i>
+                      <p>Notifications</p>
+                    </NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink href="/compare-data">
+                      <i className="now-ui-icons objects_spaceship"></i>
+                      <p>Compare Data</p>
+                    </NavLink>
+                  </NavItem>
+                  <NavItem>
+                    <NavLink href="/locations">
+                      <i className="now-ui-icons location_pin"></i>
+                      <p>Locations</p>
+                    </NavLink>
+                  </NavItem>
+                  <UncontrolledDropdown nav>
+                    <DropdownToggle
+                      caret
+                      color="default"
+                      href="/profile"
+                      nav
+                      onClick={(e) => e.preventDefault()}
+                    >
+                      <i className="now-ui-icons users_single-02 mr-1"></i>
+                      <p>Profile</p>
+                    </DropdownToggle>
+                    <DropdownMenu>
+                      <DropdownItem to="/settings" tag={Link}>
+                        <i className="now-ui-icons ui-1_settings-gear-63 mr-1"></i>
+                        Settings
+                      </DropdownItem>
+                      <DropdownItem
+                        href="/login"
+                        onClick={() => {
+                          localStorage.removeItem("authToken");
+                          window.location.reload();
+                        }}
+                        tag={Link}
+                      >
+                        <i className="now-ui-icons ui-1_simple-remove mr-1"></i>
+                        Logout
+                      </DropdownItem>
+                    </DropdownMenu>
+                  </UncontrolledDropdown>
+                </>
+              )}
             </Nav>
           </Collapse>
         </Container>

@@ -120,3 +120,41 @@ def get_angle_of_rotation(path):
 def rotate_and_save_image(image_path: str):
     angle = get_angle_of_rotation(image_path)
     rotate_image(image_path, angle)
+
+
+def crop_black_padding(image_path, suffix="_cropped"):
+    # Load the image
+    image = cv2.imread(image_path)
+
+    # Check if the image is loaded properly
+    if image is None:
+        return "Error: Unable to load image"
+
+    original_height, original_width = image.shape[:2]
+    gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+
+    _, binary_mask = cv2.threshold(gray, 1, 255, cv2.THRESH_BINARY)
+
+    contours, _ = cv2.findContours(
+        binary_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
+
+    if contours:
+        # Get the bounding box of all contours combined
+        x, y, w, h = cv2.boundingRect(cv2.convexHull(np.vstack(contours)))
+
+        cropped_image = image[y:y+h, x:x+w]
+
+        resized_image = cv2.resize(
+            cropped_image, (original_width, original_height))
+
+        base_name, ext = os.path.splitext(image_path)
+        new_filename = f"{base_name}{suffix}{ext}"
+
+        cv2.imwrite(new_filename, resized_image)
+        return f"Cropped image saved as: {new_filename}"
+    else:
+        return "No non-black areas found."
+
+
+crop_black_padding(
+    "..\data\LC09_L1TP_015053_20240801_20240802_02_T1_thumb_large_rotated.jpeg")

@@ -1,4 +1,4 @@
-
+.env
 *.tar
-
+data/
 *.pyc

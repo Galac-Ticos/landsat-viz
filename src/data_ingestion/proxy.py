@@ -1,5 +1,7 @@
 from landsatxplore.earthexplorer import EarthExplorer, API
-from . import utils
+# from . import utils
+import utils
+
 
 class Proxy:
     def __init__(self, username, password) -> None:

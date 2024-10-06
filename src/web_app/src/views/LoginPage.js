@@ -59,6 +59,7 @@ function LoginPage() {
       if (response.ok && data.token) {
         localStorage.setItem("authToken", data.token);
         navigate("/home");
+        alert("Login successful!");
       } else {
         alert(data.error || "Login failed");
       }

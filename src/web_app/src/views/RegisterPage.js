@@ -61,7 +61,8 @@ function RegisterPage() {
       if (response.ok) {
         // Registro exitoso, guardar el token si es necesario o redirigir
         localStorage.setItem("authToken", data.token); // Asume que el token viene en la respuesta
-        navigate("/home");
+        navigate("/login");
+        alert("Registration successful!");
       } else {
         alert(data.error || "Registration failed");
       }

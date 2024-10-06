@@ -1,10 +1,10 @@
 import os
 import tarfile
-import json
-import numpy as np
-import cv2
+from PIL import Image, ImageDraw
+from colorthief import ColorThief
 import math
-import os
+import cv2
+import numpy as np
 
 
 def extract_tar_files(data_directory):
@@ -52,3 +52,76 @@ def find_metadata_json_files(directory_path):
             matching_files.append(load_json_files([full_path])[0])
 
     return matching_files
+
+
+def rotation_angle(A, B):
+    x1, y1 = A
+    x2, y2 = B
+    angle = math.atan2(y2-y1, x2-x1)
+    return angle
+
+
+def rotate_image(image_path: str, angle: float = 10.8):
+    img = Image.open(image_path)
+    path, extension = os.path.splitext(image_path)
+    img.rotate(angle).save(f'{path}-r{angle}{extension}')
+
+
+def get_colors(image_path: str):
+    color_str = []
+    img = Image.open(image_path)
+    width, height = img.size
+    quantized = img.quantize(colors=10, kmeans=3)
+    convert_rgb = quantized.convert('RGB')
+    colors = convert_rgb.getcolors()
+    color_str = sorted(colors, reverse=True)
+    final_list = []
+    for i in color_str:
+        final_list.append(i[1])
+    print(final_list[0])  # TODO: CHANGE TO RETURN
+
+
+def highlight(image_path: str, A, B, C, D, color="magenta"):
+    img = Image.open(image_path)
+    draw = ImageDraw.Draw(img)
+    draw.line([A, B], fill=80)
+    draw.line([A, C], fill=50)
+    draw.line([B, D], fill=128)
+    draw.line([C, D], fill=200)
+    path, extension = os.path.splitext(image_path)
+    img.save(f'{path}-drwn{extension}')
+
+
+def get_angle_of_rotation(path):
+    # Finding image
+    img_path = path
+
+    # Reading image and converting to gray scale
+    img_before = cv2.imread(img_path)
+    img_gray = cv2.cvtColor(img_before, cv2.COLOR_BGR2GRAY)
+    img_gray[img_gray > 0] = 255
+    img_edges = cv2.Canny(img_gray, 100, 100, apertureSize=3)
+    lines = cv2.HoughLinesP(img_edges, 1, math.pi / 180.0,
+                            100, minLineLength=20, maxLineGap=5)
+
+    # Finding angles using slope formula tan(θ) = (y2-y1)/(x2-x1)
+    angles = []
+    for [[x1, y1, x2, y2]] in lines:
+        cv2.line(img_before, (x1, y1), (x2, y2), (255, 0, 0), 3)
+        angle = math.degrees(math.atan2(y2 - y1, x2 - x1))
+        angles.append(angle)
+
+    # The algorithm will detect multiple lines and edges. We take the median of all angles
+    median_angle = np.median(angles)+90
+
+    return median_angle
+
+
+def rotate_and_save_image(image_path: str):
+    angle = get_angle_of_rotation(
+        '/home/alexbrenes/git/landsat-viz/src/data/LC09_L1TP_015053_20240801_20240802_02_T1_thumb_large.jpeg')
+    rotate_image(image_path, angle)
+
+
+rotate_and_save_image(
+    '/home/alexbrenes/git/landsat-viz/src/data/LC09_L1TP_015053_20240801_20240802_02_T1_thumb_large.jpeg')

@@ -1,0 +1,41 @@
+name: Publish package
+
+on:
+  release:
+    types: [created]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+    steps:
+    - name: Code checkout
+      uses: actions/checkout@v3
+
+#    - name: Set up Python 3.8
+#      uses: actions/setup-python@v3
+#      with:
+#        python-version: '3.8'
+
+#    - name: Run pytest and generate coverage report
+#      run: poetry run pytest --cov=./landsatxplore --cov-report=xml
+#      env:
+#        LANDSATXPLORE_USERNAME: ${{ secrets.LANDSATXPLORE_TEST_USERNAME }}
+#        LANDSATXPLORE_PASSWORD: ${{ secrets.LANDSATXPLORE_TEST_PASSWORD }}
+
+#    - name: Upload coverage report
+#      uses: codecov/codecov-action@v1
+#      with:
+#        token: ${{ secrets.CODECOV_TOKEN }}
+        
+    - name: Build and publish to pypi
+      uses: JRubics/poetry-publish@v1.16
+      with:
+        pypi_token: ${{ secrets.TEST_PYPI_TOKEN }}
+        repository_name: "testpypi"
+        repository_url: "https://test.pypi.org/legacy/"
+
+    - name: Build and publish to pypi
+      uses: JRubics/poetry-publish@v1.16
+      with:
+        pypi_token: ${{ secrets.PYPI_TOKEN }}

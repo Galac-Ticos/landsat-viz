@@ -1,5 +1,16 @@
-from landsatxplore.api import API
-from landsatxplore.earthexplorer import EarthExplorer
+import sys
+import os
+
+#module_path = os.path.join('landsat-module', 'landsatxplore-master', 'landsatxplore')
+#sys.path.append(module_path)
+
+#from earthexplorer import EarthExplorer, API 
+
+
+module_path = os.path.join('landsat-module', 'landsatxplore-master')
+sys.path.append(module_path)
+
+from landsatxplore.earthexplorer import EarthExplorer, API
 
 class Proxy:
     def __init__(self, username, password) -> None:

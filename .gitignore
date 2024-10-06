@@ -1,11 +1,7 @@
-# Backend
 __pycache__/
 *.pyc
 venv/
 .env
-data/
-*.tar
 
-# Frontend
 /src/web_app/node_modules
 src/web_app/package-lock.json

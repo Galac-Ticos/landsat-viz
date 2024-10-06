@@ -38,7 +38,7 @@ def verify_token(token):
         return None
 
 # Create a user and save to Firebase Authentication and Realtime Database
-def create_user(email, password, threshold, location, notifications):
+def post_user(email, password, threshold=0.70, location=[], notifications=[]):
     try:
         # Create user in Firebase Authentication
         user = auth.create_user(
@@ -61,6 +61,22 @@ def create_user(email, password, threshold, location, notifications):
         print(f"Error creating user: {e}")
         return None
 
+# Update a user password, email or threshold
+def put_user(user_id, email, password, threshold):
+    try:
+        if email is not None or threshold is not None:
+            update_data ={"email": email,  "password": password}
+            auth.update_user(user_id, **update_data)
+            print(f"User with id {user_id} updated on Firebase.")
+        if threshold is not None:
+            db.reference(f'users/{user_id}').update({'threshold': threshold})
+            print(f"Threshold of user with ID {user_id} updated to {threshold}.")
+        return {"success": True, "message": "User updated successfully"}
+    except Exception as e:
+        print(f"Error updating user: {e}")
+        return {"success": False, "message": f"Error updating user: {e}"}
+
+
 # Get user data from Firebase Realtime Database
 def get_user(user_id):
     try:
@@ -70,30 +86,6 @@ def get_user(user_id):
         print(f"User with ID {user_id} not found.")
     except Exception as e:
         print(f"Error reading user data: {e}")
-    return None
-
-# Update user data in Firebase Realtime Database
-def update_user(user_id, update_data):
-    try:
-        db.reference(f'users/{user_id}').update(update_data)
-        print(f"User {user_id} updated successfully!")
-        return True
-    except Exception as e:
-        print(f"Error updating user data: {e}")
-    return None
-
-# Delete user from Firebase Authentication and Realtime Database
-def delete_user(user_id):
-    try:
-        # Delete user from Firebase Authentication
-        auth.delete_user(user_id)
-
-        # Delete user data from Firebase Realtime Database
-        db.reference(f'users/{user_id}').delete()
-        print(f"User {user_id} deleted successfully!")
-        return True
-    except Exception as e:
-        print(f"Error deleting user data: {e}")
     return None
 
 # Authenticate user and return user data from Firebase Realtime Database
@@ -120,7 +112,7 @@ def get_user_by_email_and_password(email, password):
         return None
 
 # Get notifications of a user
-def get_user_notifications(user_id):
+def get_notifications(user_id):
     try:
         # Fetch user data
         user_data = db.reference(f'users/{user_id}').get()
@@ -133,14 +125,13 @@ def get_user_notifications(user_id):
     return None
 
 # Add a notification to a user
-def add_user_notification(user_id, new_notification):
+def post_notification(user_id, message):
     try:
         # Fetch existing notifications
         user_data = db.reference(f'users/{user_id}').get()
         if user_data:
             notifications = user_data.get('notifications', [])
-            notifications.append(new_notification)
-
+            notifications.append({"read":False, "message":message})
             # Update notifications field in the database
             db.reference(f'users/{user_id}').update({"notifications": notifications})
             return True
@@ -149,8 +140,25 @@ def add_user_notification(user_id, new_notification):
         print(f"Error adding notification: {e}")
     return None
 
+def update_notification_read_by_message(user_id, message, read):
+    try:
+        notifications_ref = db.reference(f'users/{user_id}/notifications')
+        notifications = notifications_ref.get()
+        if notifications:
+            for idx, notification in enumerate(notifications):
+                if notification.get('message') == message:
+                    notifications[idx]['read'] = read
+                    notifications_ref.set(notifications)
+                    return {"success": True, "message": f"Notification read status updated to {read}"}
+            return {"success": False, "message": "Notification with the specified message not found"}
+        else:
+            return {"success": False, "message": "No notifications found for user"}
+    except Exception as e:
+        print(f"Error updating notification: {e}")
+        return {"success": False, "message": f"Error updating notification: {e}"}
+
 # Get locations of a user
-def get_user_locations(user_id):
+def get_locations(user_id):
     try:
         # Fetch user data
         user_data = db.reference(f'users/{user_id}').get()
@@ -163,14 +171,13 @@ def get_user_locations(user_id):
     return None
 
 # Add a new location to a user
-def add_user_location(user_id, new_location):
+def post_location(user_id, longitude, latitude, description):
     try:
         # Fetch existing directions (locations)
         user_data = db.reference(f'users/{user_id}').get()
         if user_data:
             directions = user_data.get('location', [])
-            directions.append(new_location)
-
+            directions.append({"longitude": longitude, "latitude": latitude, "description": description})
             # Update directions field in the database
             db.reference(f'users/{user_id}').update({"location": directions})
             return "Location added successfully!"

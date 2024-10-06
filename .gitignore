@@ -1,3 +1,7 @@
+__pycache__/
+*.pyc
+venv/
+.env
 
 /src/web_app/node_modules
 src/web_app/package-lock.json

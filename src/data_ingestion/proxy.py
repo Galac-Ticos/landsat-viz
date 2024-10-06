@@ -1,16 +1,6 @@
-import sys
-import os
-
-#module_path = os.path.join('landsat-module', 'landsatxplore-master', 'landsatxplore')
-#sys.path.append(module_path)
-
-#from earthexplorer import EarthExplorer, API 
-
-
-module_path = os.path.join('landsat-module', 'landsatxplore-master')
-sys.path.append(module_path)
-
 from landsatxplore.earthexplorer import EarthExplorer, API
+from utils import write_scene_json
+
 
 class Proxy:
     def __init__(self, username, password) -> None:
@@ -30,7 +20,6 @@ class Proxy:
                 end_date=end_date,
                 max_cloud_cover=max_cloud_cover
             )
-        print(scenes)
         return scenes
 
     def download_scene(self, scene) -> int:
@@ -44,8 +33,15 @@ class Proxy:
         for scene in scenes:
             status |= self.download_scene(scene)
         return status
-    
-    def fetch_scenes(self, latitude, longitude, start_date, end_date, max_cloud_cover, datasets = ['landsat_ot_c2_l1', 'landsat_ot_c2_l2']):
-        scenes = self.search_scenes(datasets,latitude,longitude,start_date,end_date,max_cloud_cover)
+
+    def fetch_scenes(self, latitude, longitude, start_date, end_date, max_cloud_cover, datasets=['landsat_ot_c2_l1', 'landsat_ot_c2_l2']):
+        scenes = self.search_scenes(
+            datasets, latitude, longitude, start_date, end_date, max_cloud_cover)
+
         status = self.download_scenes(scenes)
+
+        for s in scenes:
+            write_scene_json(s)
+
+        # status = 1
         return status

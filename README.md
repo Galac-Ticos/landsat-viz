@@ -1,4 +1,4 @@
-## Landsat Visualization Project
+# Landsat Visualization Project
 
 ### Overview
 

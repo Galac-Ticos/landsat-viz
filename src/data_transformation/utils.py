@@ -47,13 +47,13 @@ def rotation_angle(A, B):
 def rotate_image(image_path: str, angle: float = 10.8):
     img = Image.open(image_path)
     path, extension = os.path.splitext(image_path)
-    img.rotate(angle).save(f'{path}-r{angle}{extension}')
+    rotated = f'{path}-r{angle}{extension}'
+    img.rotate(angle).save(rotated)
+    return rotated
 
 
-def get_colors(image_path: str):
+def get_colors(img):
     color_str = []
-    img = Image.open(image_path)
-    width, height = img.size
     quantized = img.quantize(colors=10, kmeans=3)
     convert_rgb = quantized.convert('RGB')
     colors = convert_rgb.getcolors()
@@ -61,7 +61,7 @@ def get_colors(image_path: str):
     final_list = []
     for i in color_str:
         final_list.append(i[1])
-    print(final_list[0])  # TODO: CHANGE TO RETURN
+    return final_list[0]
 
 
 def highlight(image_path: str, A, B, C, D, color="magenta"):
@@ -100,11 +100,24 @@ def get_angle_of_rotation(path):
     return median_angle
 
 
+def color_map(image_path: str):
+    img = Image.open(image_path)
+    w, _ = img.size
+    k = 3
+    s = w // k
+    points = [i*(w//k) for i in range(k)]
+    boxes = [[(points[i], points[j], points[i] + s, points[j] + s) for i in range(k)] for j in range(k)]
+    cmap = [[get_colors(img.crop(boxes[i][j])) for j in range(k)] for i in range(k)]
+    return cmap
+    
+
 def rotate_and_save_image(image_path: str):
     angle = get_angle_of_rotation(
         '/home/alexbrenes/git/landsat-viz/src/data/LC09_L1TP_015053_20240801_20240802_02_T1_thumb_large.jpeg')
-    rotate_image(image_path, angle)
+    return rotate_image(image_path, angle)
 
+rotated = rotate_and_save_image('/home/alexbrenes/git/landsat-viz/src/data/LC09_L1TP_015053_20240801_20240802_02_T1_thumb_large.jpeg')
+print(color_map(rotated))
 
-rotate_and_save_image(
-    '/home/alexbrenes/git/landsat-viz/src/data/LC09_L1TP_015053_20240801_20240802_02_T1_thumb_large.jpeg')
+# rotate_and_save_image(
+#     '/home/alexbrenes/git/landsat-viz/src/data/LC09_L1TP_015053_20240801_20240802_02_T1_thumb_large.jpeg')

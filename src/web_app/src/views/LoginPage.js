@@ -23,7 +23,7 @@ function LoginPage() {
   const [password, setPassword] = useState("");
   const [isValid, setIsValid] = useState(false);
   const navigate = useNavigate();
-  const BASE_HOST = "https://landsat-backend-7dafd70968d0.herokuapp.com"
+  const BASE_HOST = "http://www.galac-ticos.landsatviz.com/"
   useEffect(() => {
     document.body.classList.add("login-page");
     document.body.classList.add("sidebar-collapse");

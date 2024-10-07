@@ -12,10 +12,11 @@ app = Flask(__name__)
 
 ENV = os.environ.get('ENV', 'DEV')
 
-# Setup CORS
 cors = CORS(app, resources={
     r"/*": {
-        "origins": "*" # "https://landsat-viz.vercel.app" if ENV == "PROD" else 
+        "origins": [
+            "*"
+        ]
     }
 })
 

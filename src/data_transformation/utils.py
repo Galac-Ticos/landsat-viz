@@ -5,6 +5,7 @@ from colorthief import ColorThief
 import math
 import cv2
 import numpy as np
+import json
 
 
 def extract_tar_files(data_directory):
@@ -41,7 +42,7 @@ def load_json_files(file_paths):
     return json_objects
 
 
-def find_metadata_json_files(directory_path):
+def find_metadata_json_files(directory_path='../data'):
     matching_files = []
 
     for filename in os.listdir(directory_path):
@@ -50,6 +51,20 @@ def find_metadata_json_files(directory_path):
             # Construct the full path and add it to the list
             full_path = os.path.join(directory_path, filename)
             matching_files.append(load_json_files([full_path])[0])
+
+    return matching_files
+
+
+def find_larger_jpg_files(directory_path):
+    matching_files = []
+
+    for filename in os.listdir(directory_path):
+        # Check if the file ends with 'larger.jpg' (case insensitive)
+        if filename.lower().endswith("large.jpeg"):
+            # Construct the full path and add it to the list
+            full_path = os.path.join(directory_path, filename)
+            # Store the full path of the image
+            matching_files.append(full_path)
 
     return matching_files
 
@@ -70,6 +85,8 @@ def rotate_image(image_path: str, angle: float = 10.8):
 
 
 def get_colors(img):
+    img = Image.open(img)
+
     color_str = []
     quantized = img.quantize(colors=10, kmeans=3)
     convert_rgb = quantized.convert('RGB')
@@ -167,7 +184,3 @@ def crop_black_padding(image_path, suffix="_cropped"):
         return f"Cropped image saved as: {new_filename}"
     else:
         return "No non-black areas found."
-
-
-crop_black_padding(
-    "..\data\LC09_L1TP_015053_20240801_20240802_02_T1_thumb_large_rotated.jpeg")

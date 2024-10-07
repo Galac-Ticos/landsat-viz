@@ -2,6 +2,7 @@ from flask import request, jsonify
 from flask.views import MethodView
 from src.utils import get_user_by_email_and_password
 
+
 class AuthView(MethodView):
     def post(self):
         data = request.get_json()

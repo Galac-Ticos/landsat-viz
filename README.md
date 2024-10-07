@@ -79,11 +79,11 @@ For further details and access to the codebase, please visit our GitHub reposito
 
 #### Resources
 
-[1] <https://www.usgs.gov/landsat-missions/landsat-satellite-missions>
-[2] <https://svs.gsfc.nasa.gov/11433/>
-[3] <https://landsat.gsfc.nasa.gov/data/>
-[4] <https://www.nv5geospatialsoftware.com/docs/TimeSeriesTutorial.html>
-[5] <https://landsat.gsfc.nasa.gov/satellites/landsat-next/>
-[6] <https://earth.esa.int/eogateway/missions/landsat>
-[7] <https://github.com/mapbox/landsat-tiler/blob/master/README.md>
-[8] <https://pypi.org/project/landsatxplore/>
+- <https://www.usgs.gov/landsat-missions/landsat-satellite-missions>
+- <https://svs.gsfc.nasa.gov/11433/>
+- <https://landsat.gsfc.nasa.gov/data/>
+- <https://www.nv5geospatialsoftware.com/docs/TimeSeriesTutorial.html>
+- <https://landsat.gsfc.nasa.gov/satellites/landsat-next/>
+- <https://earth.esa.int/eogateway/missions/landsat>
+- <https://github.com/mapbox/landsat-tiler/blob/master/README.md>
+- <https://pypi.org/project/landsatxplore/>

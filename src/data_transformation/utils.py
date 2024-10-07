@@ -135,11 +135,6 @@ def rotate_and_save_image(image_path: str):
     rotate_image(image_path, angle)
 
 
-rotated = rotate_and_save_image(
-    '/home/alexbrenes/git/landsat-viz/src/data/LC09_L1TP_015053_20240801_20240802_02_T1_thumb_large.jpeg')
-print(color_map(rotated))
-
-
 def crop_black_padding(image_path, suffix="_cropped"):
     # Load the image
     image = cv2.imread(image_path)

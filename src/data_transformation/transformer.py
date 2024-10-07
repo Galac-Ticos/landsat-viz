@@ -23,3 +23,7 @@ class Transformer:
         }
 
         return metadata_user
+
+    def get_rgb_matrix(self, image_path=None):
+        matrix = [[150, 150, 150], [150, 150, 150], [150, 150, 150]]
+        return matrix

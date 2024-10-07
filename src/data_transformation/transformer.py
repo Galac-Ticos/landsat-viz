@@ -5,9 +5,6 @@ class Transformer:
     def __init__(self) -> None:
         self.user_form = None
 
-    def transform(self, scene):
-        pass
-
     def get_scene_metadata(self, data_path='../data'):
         metadata_json = utils.find_metadata_json_files(data_path)[0]
 
@@ -27,3 +24,14 @@ class Transformer:
     def get_rgb_matrix(self, image_path=None):
         matrix = [[150, 150, 150], [150, 150, 150], [150, 150, 150]]
         return matrix
+
+    def make_json_to_user(self, data_path='../data', image_path=None):
+        metadata_user = self.get_scene_metadata(data_path)
+        rgb_matrix = self.get_rgb_matrix(image_path)
+
+        self.user_form = {
+            "metadata": metadata_user,
+            "rgb_matrix": rgb_matrix
+        }
+
+        return self.user_form

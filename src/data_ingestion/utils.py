@@ -32,14 +32,14 @@ def serialize_scene(scene):
 
 def write_scene_json(scene):
     # Create the 'data' directory if it doesn't exist
-    if not os.path.exists('data'):
-        os.makedirs('data')
+    if not os.path.exists('../data'):
+        os.makedirs('../data')
 
     # Serialize the scene to a JSON-compatible format
     serialized_scene = serialize_scene(scene)
 
     display_id = serialized_scene['display_id']
-    filename = os.path.join('data', f"{display_id}.json")
+    filename = os.path.join('../data', f"{display_id}.json")
 
     # Write the serialized scene data to a JSON file
     with open(filename, 'w') as json_file:

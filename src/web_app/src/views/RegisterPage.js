@@ -23,7 +23,7 @@ function RegisterPage() {
   const [password, setPassword] = useState("");
   const [isValid, setIsValid] = useState(false);
   const navigate = useNavigate();
-  const BASE_HOST = "https://landsat-viz-7c4bd6683246.herokuapp.com/"
+  const BASE_HOST = "https://landsat-viz-7c4bd6683246.herokuapp.com";
 
   useEffect(() => {
     document.body.classList.add("login-page");
@@ -38,10 +38,50 @@ function RegisterPage() {
     };
   }, []);
 
-  // Verificar si el email y el password están ingresados para habilitar el botón
   useEffect(() => {
     setIsValid(email !== "" && password !== "");
   }, [email, password]);
+
+  const createCRLocation = async () => {
+    const token = localStorage.getItem("authToken");
+  
+    try {
+      const response = await fetch(`${BASE_HOST}/auth`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          email: email,
+          password: password,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error('Error to create CR location');
+      }
+      const data = await response.json();
+      if (response.ok && data.token) {
+        const response2 = await fetch(BASE_HOST + '/locations', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${data.token}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({
+            latitude:9.9281, 
+            longitude:-84.0907,
+            description:"Costa Rica"
+          }),
+        });
+        if (!response2.ok) {
+          throw new Error('Error to create CR location');
+        }
+      }
+  
+    } catch (err) {
+      console.log(err.message);
+    }
+  };
 
   const handleRegister = async () => {
     try {
@@ -59,8 +99,7 @@ function RegisterPage() {
       const data = await response.json();
 
       if (response.ok) {
-        // Registro exitoso, guardar el token si es necesario o redirigir
-        localStorage.setItem("authToken", data.token); // Asume que el token viene en la respuesta
+        await createCRLocation()
         navigate("/login");
         alert("Registration successful!");
       } else {

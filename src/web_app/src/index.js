@@ -26,9 +26,11 @@ import "assets/demo/nucleo-icons-page-styles.css?v=1.5.0";
 import HomePage from "views/HomePage.js";
 import LoginPage from "views/LoginPage.js";
 import RegisterPage from "views/RegisterPage.js";
+import LocationPage from "views/LocationPage.js";
 import SettingsPage from "views/SettingsPage.js";
 
 import ProtectedRoute from "components/ProtectedRoute.js";
+import CompareDataPage from "views/CompareDataPage";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -39,6 +41,8 @@ root.render(
       <Route path="/login" element={<LoginPage />} />
       <Route path="/register" element={<RegisterPage />} />
       <Route path="/settings" element={<ProtectedRoute element={<SettingsPage />} />} />
+      <Route path="/compare-data" element={<ProtectedRoute element={<CompareDataPage />} />} />
+      <Route path="/locations" element={<ProtectedRoute element={<LocationPage />} />} />
       <Route path="*" element={<Navigate to="/home" replace />} />
     </Routes>
   </BrowserRouter>

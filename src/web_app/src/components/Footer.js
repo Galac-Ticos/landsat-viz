@@ -10,11 +10,11 @@ function Footer() {
           <ul>
             <li>
               <a
-                href="http://presentation.creative-tim.com?ref=nukr-dark-footer"
+                href="https://github.com/Galac-Ticos/landsat-viz"
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                About Us
+                Source code
               </a>
             </li>
           </ul>

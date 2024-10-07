@@ -83,12 +83,12 @@ function Navbar() {
                 </NavItem>
               ) : (
                 <>
-                  <NavItem>
+                  {/*<NavItem>
                     <NavLink href="/notifications">
                       <i className="now-ui-icons ui-1_bell-53"></i>
                       <p>Notifications</p>
                     </NavLink>
-                  </NavItem>
+                  </NavItem>*/}
                   <NavItem>
                     <NavLink href="/compare-data">
                       <i className="now-ui-icons objects_spaceship"></i>
